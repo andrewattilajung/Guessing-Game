@@ -79,7 +79,6 @@ const randomInRange = (min, max) => {
 
 
 const checkGuess = (num) => {
-
     if (num > secretNumber && numAttempts > 1) {
         console.log("Too high!");
         console.log("You have " + numAttempts + " attempts left!");

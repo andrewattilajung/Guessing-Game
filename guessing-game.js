@@ -46,20 +46,23 @@ const rl = readline.createInterface({
 
   function askGuess() {
   rl.question("Enter a guess: ", (answer) => {
+    numAttempts--;
       if ((/[a-zA-Z]/).test(answer)) {
         console.log("Invalid number!");
         return askGuess();
     }
-      numAttempts--;
-    if (numAttempts < 1) {
+
+    if (numAttempts === 0 && checkGuess(Number(answer)) !== true) {
        console.log("You Lose! The secret number is: " + secretNumber + ".");
        return rl.close();
     }
     else if (checkGuess(Number(answer)) !== true) {
     askGuess();
-    } else {
+    }
+    else if (numAttempts >= 0 && checkGuess(Number(answer)) === true) {
+        console.log("Correct!");
         console.log("You win! The secret number is: " + secretNumber + ".");
-        rl.close();
+        return rl.close();
     }
   });
 }
@@ -94,7 +97,6 @@ const checkGuess = (num) => {
         console.log("You have " + numAttempts + " attempt left. This is your final guess!!");
         return false;
     } else if (num === secretNumber) {
-        console.log("Correct!");
         return true;
     }
 }

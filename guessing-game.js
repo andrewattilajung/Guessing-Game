@@ -9,13 +9,14 @@ const rl = readline.createInterface({
 
   const askLimit = () => {
       rl.question("Pick a number of attempts: ", (pick) => {
-          if (pick <= 0) {
+          if (pick <= 0 || (/[a-zA-Z]/).test(pick)) {
               console.log("Invalid number! Please pick a number greater than zero!");
               return askLimit();
-          }
-          console.log("You have " + pick + " attempts");
-        numAttempts = Number(pick);
+          } else {
+          numAttempts = Number(pick);
+          console.log("You have " + numAttempts + " attempts");
         askRange();
+          }
       });
   }
 
@@ -25,7 +26,15 @@ const rl = readline.createInterface({
 
   const askRange = () => {
     rl.question("Enter a minimum number: ", (minNum) => {
+        if (minNum < 1 || (/[a-zA-Z]/).test(minNum)) {
+            console.log("Invalid number! Please pick a number greater than zero!");
+            return askRange();
+        }
         rl.question("Enter a maximum number: ", (maxNum) => {
+            if (maxNum < 1 || (/[a-zA-Z]/).test(maxNum)) {
+                console.log("Invalid number! Please pick a number greater than zero!");
+                return askRange();
+            }
             console.log(`I'm thinking of a number between ${minNum} and ${maxNum}...`);
             secretNumber = randomInRange(Number(minNum), Number(maxNum));
             askGuess();
@@ -37,8 +46,12 @@ const rl = readline.createInterface({
 
   function askGuess() {
   rl.question("Enter a guess: ", (answer) => {
+      if ((/[a-zA-Z]/).test(answer)) {
+        console.log("Invalid number!");
+        return askGuess();
+    }
       numAttempts--;
-    if (numAttempts === 0) {
+    if (numAttempts < 1) {
        console.log("You Lose! The secret number is: " + secretNumber + ".");
        return rl.close();
     }
